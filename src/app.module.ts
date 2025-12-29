@@ -23,11 +23,11 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'Nhatsa90',
-      database: 'alotransito',
+      host: process.env.DB_HOST,// 'mysql-denuncias.alwaysdata.net', //'localhost',
+      port: Number(process.env.DB_PORT),//3306,
+      username:  process.env.DB_USER,// 'denuncias',//'root',
+      password: process.env.DB_PASS,//'Kelinha@2311', //'Nhatsa90',
+      database:  process.env.DB_NAME, //'denuncias_dtsic', //, 'alotransito',
       entities: [Usuario, Upload, Denuncia, UserGestao, Pessoa, Funcionario],
       synchronize: true,
     }),

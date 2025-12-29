@@ -3,14 +3,14 @@ POST http://localhost:3000/auth/register-usuario
 Content-Type: application/json
 
 {
-  "nome": "Virgilio",
-  "apelido": "Monjane",
+  "nome": "Ernesto",
+  "apelido": "Nhatsave",
   "local_nascimento": "Maputo",
   "residenciaActual": "Maputo",
   "contacto": "+258841212121",
   "data_nascimento": "1990-05-10",
-  "senha": "12345678",
-  "email": "mondlanev.gil@gmail.com",
+  "senha": "Nhatsa90",
+  "email": "enhatsave@gmail.com",
   "genero": "M",
   "perfil": "usuario"
 }
@@ -73,7 +73,7 @@ Content-Type: application/json
 
 ### Criar denúncia AUTENTICADA
 POST http://localhost:3000/denuncias/criar
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoic2FyYUBnbWFpbC5jb20iLCJ0aXBvIjoidXN1YXJpbyIsIm5vbWUiOiJTYXJhIiwiaWF0IjoxNzY2NTg1MTI0LCJleHAiOjE3NjY2MTM5MjR9.jbemeL9-I-S1TRVM3tGeyg1YXvUChiBkc_yFrMpwa3Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImVtYWlsIjoiZW5oYXRzYXZlQGdtYWlsLmNvbSIsIm5vbWUiOiJFcm5lc3RvIiwicm9sZSI6ImNpZGFkYW8iLCJ0aXBvIjoiY2lkYWRhbyIsImlhdCI6MTc2NzAxMjQ3MSwiZXhwIjoxNzY3MDQxMjcxfQ.Hz62tliuK-rChuixnsTShvO8wyafBvXnndf-R0Otlyc
 Content-Type: application/json
 
 {
