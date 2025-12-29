@@ -1,0 +1,23 @@
+### Buscar denúncias do usuário logado (paginadas)
+GET http://localhost:3000/usuario/minhas-denuncias?pagina=1&limite=10
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImVtYWlsIjoiZW5oYXRzYXZlQGdtYWlsLmNvbSIsIm5vbWUiOiJFcm5lc3RvIiwicm9sZSI6ImNpZGFkYW8iLCJ0aXBvIjoiY2lkYWRhbyIsImlhdCI6MTc2Njc0MjMzMSwiZXhwIjoxNzY2NzcxMTMxfQ.8b_TOI4iHhF26yN3zjMFTnc85Ivpv4oeKwy-KizSx4o
+Content-Type: application/json
+
+### SARA
+GET http://localhost:3000/usuario/minhas-denuncias?pagina=1&limite=10
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoic2FyYUBnbWFpbC5jb20iLCJub21lIjoiU2FyYSIsInJvbGUiOiJjaWRhZGFvIiwidGlwbyI6ImNpZGFkYW8iLCJpYXQiOjE3NjY2MDEwMTAsImV4cCI6MTc2NjYyOTgxMH0.9ohO4Qt69ha-GSPMEa0wxxCURKMdLEipjXOqq4et_Bg
+Content-Type: application/json
+
+###
+GET http://localhost:3000/usuario/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImVtYWlsIjoiZW5oYXRzYXZlQGdtYWlsLmNvbSIsInRpcG8iOiJjaWRhZGFvIiwibm9tZSI6IkVybmVzdG8iLCJpYXQiOjE3NjY1ODk4MTgsImV4cCI6MTc2NjYxODYxOH0.i8XzBYPGjHonpxjxSmMK0GUyiZB20OS4GI9HX9DCXIs
+Content-Type: application/json
+
+###   APagar
+### Marcar denúncia como apagada
+PATCH http://localhost:3000/usuario/apagar/8
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImVtYWlsIjoiZW5oYXRzYXZlQGdtYWlsLmNvbSIsIm5vbWUiOiJFcm5lc3RvIiwicm9sZSI6ImNpZGFkYW8iLCJ0aXBvIjoiY2lkYWRhbyIsImlhdCI6MTc2Njc0MjMzMSwiZXhwIjoxNzY2NzcxMTMxfQ.8b_TOI4iHhF26yN3zjMFTnc85Ivpv4oeKwy-KizSx4o
+
+
+###

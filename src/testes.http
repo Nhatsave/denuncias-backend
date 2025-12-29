@@ -1,0 +1,133 @@
+### Registrar usuário
+POST http://localhost:3000/auth/register-usuario
+Content-Type: application/json
+
+{
+  "nome": "Virgilio",
+  "apelido": "Monjane",
+  "local_nascimento": "Maputo",
+  "residenciaActual": "Maputo",
+  "contacto": "+258841212121",
+  "data_nascimento": "1990-05-10",
+  "senha": "12345678",
+  "email": "mondlanev.gil@gmail.com",
+  "genero": "M",
+  "perfil": "usuario"
+}
+
+### Criar usuário de gestão
+POST http://localhost:3000/auth/register-funcionario
+Content-Type: application/json
+
+{
+  "nome": "Jose",
+  "apelido": "Zualo",
+  "genero": "Masculino",
+  "data_nascimento": "1990-05-10",
+  "local_nascimento": "Maputo",
+  "nip": "123456",
+  "categoria": "Sargento",
+  "contacto": "258870999911",
+  "departamento": "TI",
+  "email": "josezualo77@gmail.com",
+  "perfil": "monitor",
+  "senha": "12345678"
+}
+
+
+### Login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "enhatsave@gmail.com",
+  "senha": "Nhatsa90"
+}
+### Login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "sara@gmail.com",
+  "senha": "Nhatsa90"
+}
+### Login
+POST http://localhost:3000/auth/login-funcionario
+Content-Type: application/json
+
+{
+  "nip": "123456",
+  "senha": "12345678"
+}
+
+### Criar upload (JSON – não recomendado)
+POST http://localhost:3000/uploads/arquivo
+Content-Type: application/json
+
+{
+  "id": 1,
+  "tipo": "foto",
+  "nomeArquivo": "1691498023456.jpg",
+  "caminho": "uploads/foto.png"
+}
+
+### Criar denúncia AUTENTICADA
+POST http://localhost:3000/denuncias/criar
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoic2FyYUBnbWFpbC5jb20iLCJ0aXBvIjoidXN1YXJpbyIsIm5vbWUiOiJTYXJhIiwiaWF0IjoxNzY2NTg1MTI0LCJleHAiOjE3NjY2MTM5MjR9.jbemeL9-I-S1TRVM3tGeyg1YXvUChiBkc_yFrMpwa3Q
+Content-Type: application/json
+
+{
+  "descricao": "Nampula em greve",
+  "latitude": -25.969248,
+  "longitude": 32.573172,
+  "anexos": []
+}
+###
+@host = http://localhost:3000
+@access_token = 
+
+### 1. LOGIN - Obter token
+# @name login
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "enhatsave@gmail.com",
+  "senha": "Nhatsa90"
+}
+
+
+ 
+###
+@access_token = {{login.response.body.access_token}}
+
+### 2. CRIAR DENÚNCIA COM ANEXOS
+POST {{host}}/denuncias/criar
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImVtYWlsIjoiZW5oYXRzYXZlQGdtYWlsLmNvbSIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3NjU4Njc1NjUsImV4cCI6MTc2NTg3MTE2NX0.H71eh67ejvL6jMeue0LA8QDmMH2ILQWURjZIbB8MyOA}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryTest
+
+------WebKitFormBoundaryTest
+Content-Disposition: form-data; name="titulo"
+
+Buraco na estrada perigoso
+------WebKitFormBoundaryTest
+Content-Disposition: form-data; name="descricao"
+
+Existe um buraco grande na Av. 25 de Setembro, próximo ao semáforo. Já causou vários acidentes.
+------WebKitFormBoundaryTest
+Content-Disposition: form-data; name="localizacao"
+
+-25.968945, 32.569556
+------WebKitFormBoundaryTest
+Content-Disposition: form-data; name="categoria"
+
+Infraestrutura
+------WebKitFormBoundaryTest
+Content-Disposition: form-data; name="anexos"; filename="descricao.txt"
+Content-Type: text/plain
+
+Esta é uma descrição mais detalhada do problema.
+Local: Av. 25 de Setembro, km 5
+Horário: Todos os dias
+Risco: Alto - já houve capotamentos
+------WebKitFormBoundaryTest--

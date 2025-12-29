@@ -1,0 +1,21 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Denuncia } from './entities/denuncia.entity';
+
+@Injectable()
+export class DenunciasService {
+  constructor(
+    @InjectRepository(Denuncia) // <-- isso é o repositório
+    private readonly denunciaRepository: Repository<Denuncia>,
+  ) {}
+
+async criar(dto, caminhos: string[]) {
+  const denuncia = this.denunciaRepository.create({
+    ...dto,
+    anexos: caminhos,
+  });
+  return this.denunciaRepository.save(denuncia);
+}
+
+}

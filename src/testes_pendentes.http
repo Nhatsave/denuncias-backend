@@ -1,0 +1,42 @@
+### 1. Todas as denúncias
+GET http://localhost:3000/gestao/denuncias/pendentes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInRpcG8iOiJtb25pdG9yIiwiZW1haWwiOiJqb3NlenVhbG83N0BnbWFpbC5jb20iLCJyb2xlIjoibW9uaXRvciIsImlhdCI6MTc2NjYwNDEwNywiZXhwIjoxNzY2NjMyOTA3fQ.7fhwCxjl7jDCu9TKdO0XRsJdQsaSUXFYJTeniDCP7gw
+
+
+### Buscar todas as denúncias
+GET http://localhost:3000/gestao
+Accept: application/json
+
+### 2. Denúncia específica
+GET http://localhost:3000/gestao/denuncias/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImVtYWlsIjoiZW5oYXRzYXZlQGdtYWlsLmNvbSIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3NjYzODQyNDksImV4cCI6MTc2NjM4Nzg0OX0.DDiHn0f82nwue__Fu4rbdn4ZjanCeUpEAG8yiBksgpU
+
+### 3. Denúncias pendentes
+GET http://localhost:3000/gestao/denuncias/status/pendente
+Authorization: Bearer SEU_TOKEN_ADMIN
+
+### 4. Denúncias com filtros
+GET http://localhost:3000/gestao/denuncias/filtros?status=pendente&busca=estrada
+Authorization: Bearer SEU_TOKEN_ADMIN
+
+### 5. Atualizar status
+PUT http://localhost:3000/gestao/denuncias/1/status
+Authorization: Bearer SEU_TOKEN_ADMIN
+Content-Type: application/json
+
+{
+  "status": "em_analise",
+  "observacao": "Em análise pela equipa técnica"
+}
+
+### 6. Estatísticas
+GET http://localhost:3000/gestao/estatisticas/denuncias
+Authorization: Bearer SEU_TOKEN_ADMIN
+
+### 7. Dashboard
+GET http://localhost:3000/gestao/dashboard
+Authorization: Bearer SEU_TOKEN_ADMIN
+
+### 8. Denúncias por usuário
+GET http://localhost:3000/gestao/usuarios/123/denuncias
+Authorization: Bearer SEU_TOKEN_ADMIN
