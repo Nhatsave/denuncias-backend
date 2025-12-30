@@ -66,3 +66,39 @@ export class LoginDto {
   @IsNotEmpty()
   senha: string;
 }
+
+export class UpdatePasswordDto {
+   @IsString()
+  @IsNotEmpty()
+  senhaActual: string;
+  
+   @IsString()
+  @IsNotEmpty()
+  novaSenha: string;
+}
+
+export class UpdatePasswordEsquecidaDto {
+   @IsString()
+  @IsNotEmpty()
+  novaSenha: string;
+
+   @IsString()
+  @IsNotEmpty()
+  codigoValidacao: string;
+
+   @IsEmail()
+  email: string;
+}
+
+export class ValidacaoCodeDto{
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  nome: string;
+
+  @IsString()
+  @IsNotEmpty()
+  apelido: string;
+}

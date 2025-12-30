@@ -16,6 +16,12 @@ export class Denuncia {
   @Column({ default: 'pendente' })
   status: string;
 
+  @Column({default: ''})
+  encaminhada_para: string;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  data_encaminhamento: Date;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   data_denuncia: Date;
 

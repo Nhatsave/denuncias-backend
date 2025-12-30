@@ -47,9 +47,9 @@ export class DenunciasService {
 
       // Extrai as partes como strings
     const enderecoCompleto = localizacao.endereco; // ← JÁ É STRING
-    const  bairro = localizacao.bairro || null;
-    const  cidade = localizacao.cidade || null;
-    const  provincia = localizacao.provincia || null;
+    const  bairro = localizacao.bairro || '';
+    const  cidade = localizacao.cidade || '';
+    const  provincia = localizacao.provincia || '';
     const localProximo =  provincia + ' ' + cidade + ' ' +  bairro + ' ' + enderecoCompleto
     // 3. Criar denúncia
     const denuncia = this.denunciaRepository.create({

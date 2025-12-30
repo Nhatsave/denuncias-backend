@@ -2,15 +2,15 @@
 import { 
   Body, 
   Controller, 
-  Post, 
+  Post, Patch,
   HttpCode, 
   HttpStatus,
-  UseGuards 
+  Req
 } from "@nestjs/common";
-import { CreateFuncionarioDto, CreateUserDto } from "./dto/usuarioGeral.dto";
+import { CreateFuncionarioDto, CreateUserDto, UpdatePasswordDto, UpdatePasswordEsquecidaDto, ValidacaoCodeDto } from "./dto/usuarioGeral.dto";
 import { AuthService } from "./auth.service";
-import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 import { Public } from "./decorators/public.decorator";
+import { Roles } from "./decorators/roles.decorator";
 
 @Controller('auth')
 export class AuthController {
@@ -48,6 +48,42 @@ export class AuthController {
     return this.authService.loginFuncionario(body.nip, body.senha);
   }
 
+
+  @Patch('alterar-senha')
+    @Roles('cidadao') // role que o usuário deve ter
+    async alterarSenha(@Req() req, @Body() dto: UpdatePasswordDto ) {
+  
+      // Use req.user.sub (não req.user.id)
+      console.log('🔑 Usuário na requisição:', req.user);
+      console.log('🆔 ID do usuário (sub):', req.user.sub);
+  
+      return this.authService.alterarSenha(
+        req.user.sub, 
+        dto
+      );
+    }
+
+
+  @Patch('alterar-senhaEsquecida')
+    @Public()
+    async alterarSenhaEsquecida( @Body() dto: UpdatePasswordEsquecidaDto ) {
+   
+  
+      return this.authService.alterarSenhaEsquecida(
+        dto
+      );
+    }
+
+    //********************************************* */
+
+  @Post('codigo-validacao')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  async envioMail(@Body() dto: ValidacaoCodeDto){
+     return this.authService.EnviarMail(
+        dto
+      );
+  }
   // ========== TOKENS ==========
   
   @Post('refresh')
@@ -118,3 +154,5 @@ export class AuthController {
     }
   }
 }
+
+ 

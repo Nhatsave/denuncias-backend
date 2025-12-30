@@ -1,0 +1,19 @@
+
+### Login
+POST http://localhost:3000/auth/codigo-validacao
+Content-Type: application/json
+
+{
+  "email": "enhatsave@gmail.com",
+  "nome": "Ernesto",
+  "apelido": "Nhatsave"
+}
+### 
+PATCH  http://localhost:3000/auth/alterar-senhaEsquecida
+Content-Type: application/json
+
+{
+  "email": "enhatsave@gmail.com",
+  "codigoValidacao": "218748",
+  "novaSenha": "Nhatsave"
+}

@@ -1,23 +1,40 @@
 // src/auth/auth.service.ts
-import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, BadRequestException, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import {  CreateFuncionarioDto, CreateUserDto } from './dto/usuarioGeral.dto';
-import { Funcionario, Pessoa, Usuario } from './entities/geral.entity';
+import {  CreateFuncionarioDto, CreateUserDto, UpdatePasswordDto, UpdatePasswordEsquecidaDto, ValidacaoCodeDto } from './dto/usuarioGeral.dto';
+import { CodigoValidacao, Funcionario, Pessoa, Usuario } from './entities/geral.entity';
 import { FuncionarioResponseDto } from './dto/usuarioGeralResposta';
-
+import { EmailService } from 'src/email/email.service';
 import * as jwt from 'jsonwebtoken';
 import { Roles } from './decorators/roles.decorator';
+import * as crypto from 'crypto';
  
+
+/**
+ * Gera um hash SHA-256 de uma string
+ * @param dado String de entrada
+ * @returns Hash hexadecimal
+ */
+export function hashDados(dado: string): string {
+  return crypto.createHash('sha256').update(dado).digest('hex');
+}
+
+
   @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(Usuario) private readonly usuarioRepo: Repository<Usuario>,
     @InjectRepository(Funcionario) private readonly funcionarioRepo: Repository<Funcionario>,
     @InjectRepository(Pessoa) private readonly pessoaRepo: Repository<Pessoa>,
+    
+    @InjectRepository(CodigoValidacao)
+    private readonly codigoRepo: Repository<CodigoValidacao>,
+    
     private readonly jwtService: JwtService,
+    private readonly emailService: EmailService
   ) {}
 
   // Registro de usuário comum
@@ -157,7 +174,149 @@ async login(email: string, senha: string) {
   };
 }
  
+//    ALTERAR SENHA
+async alterarSenha(userId: number, dto: UpdatePasswordDto) {
+  const cidadao = await this.getMe(userId)
+    const id = cidadao.id;
+    console.log('Metodo alterar senha: ', 'ID: ' + id)
+  const usuario = await this.usuarioRepo.findOne({ where: { id_usuario: id } });
+
+  if (!usuario) {
+    throw new NotFoundException('Usuário não encontrado');
+  }
+
+  // Verifica se a senha atual confere
+  const senhaConfere = await bcrypt.compare(dto.senhaActual, usuario.senha);
+
+  if (!senhaConfere) {
+    throw new BadRequestException('Senha actual incorreta');
+  }
+
+  // Gera novo hash
+  const novaSenhaHash = await bcrypt.hash(dto.novaSenha, 10);
+  usuario.senha = novaSenhaHash;
+  await this.usuarioRepo.save(usuario);
+
+  return {
+    message: 'Senha alterada com sucesso'
+  };
+}
  
+async alterarSenhaEsquecida(dto: UpdatePasswordEsquecidaDto) {
+  // 1️⃣ Busca o usuário pelo e-mail
+  const dados = await this.getMyMail(dto.email); // retorna {id, email, nome, apelido}
+  const usuario = await this.usuarioRepo.findOne({ where: { email: dados.email } });
+
+  if (!usuario) {
+    throw new NotFoundException('Usuário não encontrado');
+  }
+
+  // 2️⃣ Busca o código de validação mais recente para o usuário
+  const codigoRegistro = await this.codigoRepo.findOne({
+    where: {
+      usuario: { id_usuario: usuario.id_usuario },
+      codigo: dto.codigoValidacao,
+    },
+    order: { criadoEm: 'DESC' }, // garante pegar o mais recente
+  });
+
+  if (!codigoRegistro) {
+    throw new BadRequestException('Código de validação inválido');
+  }
+
+  // 3️⃣ Verifica se ainda não expirou
+  const agora = new Date();
+  if (codigoRegistro.expireTime < agora) {
+    throw new BadRequestException('Código de validação expirado');
+  }
+
+  // 4️⃣ Gera novo hash da senha
+  const novaSenhaHash = await bcrypt.hash(dto.novaSenha, 10);
+  usuario.senha = novaSenhaHash;
+  await this.usuarioRepo.save(usuario);
+
+  // 5️⃣ Opcional: deletar ou invalidar o código usado
+  await this.codigoRepo.delete({ id: codigoRegistro.id });
+
+  return {
+    message: 'Senha alterada com sucesso',
+  };
+}
+
+
+async EnviarMail(dto: ValidacaoCodeDto) {
+  let codigo = '';
+  const dados = await this.getMyMail(dto.email); // retorna dados do usuário, incluindo id_usuario
+
+  if (dto.email === dados.email && dto.nome === dados.nome && dto.apelido === dados.apelido) {
+    // gerar código aleatório de 6 dígitos
+    codigo = await this.gerarCodigo6Digitos();
+
+    // criar registro de código de validação
+    const codigoValidacao = this.codigoRepo.create({
+      usuario: { id_usuario: dados.id }, // relacionamento com o usuário
+      codigo: codigo,
+      expireTime: new Date(Date.now() + 10 * 60 * 1000), // expira em 10 minutos
+    });
+
+    await this.codigoRepo.save(codigoValidacao);
+  }
+
+  await this.emailService.enviarEmail(
+    dto.email,
+    'Alo Transito',
+    `O código de restauração da senha é ${codigo}. Se você não requisitou, pode ignorar esta mensagem.`
+  );
+
+  return { message: 'Código enviado para o seu e-mail, verifique a caixa de entrada e spam' };
+}
+
+async gerarCodigo6Digitos() {
+  return Math.floor(100000 + Math.random() * 900000).toString(); // gera número entre 100000 e 999999
+}
+
+ async getMe(userId: number) {
+    const usuario = await this.usuarioRepo.findOne({
+      where: { id_usuario: userId },
+      relations: ['pessoa'],
+      select: ['id_usuario', 'email', 'residenciaActual'],
+    });
+    
+    if (!usuario) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+    
+    return {
+      id: usuario.id_usuario,
+      email: usuario.email,
+      nome: usuario.pessoa.nome,
+      apelido: usuario.pessoa.apelido,
+      contacto: usuario.pessoa.contacto,
+      residencia: usuario.residenciaActual,
+      
+    };
+  }
+ async getMyMail(email: string) {
+    const usuario = await this.usuarioRepo.findOne({
+      where: { email: email },
+      relations: ['pessoa'],
+      select: ['id_usuario', 'email', 'residenciaActual'],
+    });
+    
+    if (!usuario) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+    
+    return {
+      id: usuario.id_usuario,
+      email: usuario.email,
+      nome: usuario.pessoa.nome,
+      apelido: usuario.pessoa.apelido,
+      //contacto: usuario.pessoa.contacto,
+      //residencia: usuario.residenciaActual,
+      
+    };
+  }
 // Renova o token usando refresh token
  async refreshToken(oldRefreshToken: string) {
   try {

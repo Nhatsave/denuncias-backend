@@ -11,6 +11,7 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { DenunciasService } from './denuncias.service';
 import { CriarDenunciaDto } from './dto/criar-denuncia.dto';
+import { post } from 'axios';
 
 @Controller('denuncias')
 export class DenunciasController {
@@ -18,9 +19,7 @@ export class DenunciasController {
 
   @Post('criar')
   @UseGuards(JwtAuthGuard) // ← AQUI no controller!
-  @UseInterceptors(FileFieldsInterceptor([
-    { name: 'anexos', maxCount: 5 }
-  ]))
+  @UseInterceptors(FileFieldsInterceptor([ { name: 'anexos', maxCount: 5 }]))
   async criar(
     @UploadedFiles() files: { anexos?: Express.Multer.File[] },
     @Body() dto: CriarDenunciaDto,

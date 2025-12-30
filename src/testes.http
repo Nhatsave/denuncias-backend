@@ -41,7 +41,7 @@ Content-Type: application/json
 
 {
   "email": "enhatsave@gmail.com",
-  "senha": "Nhatsa90"
+  "senha": "Nhatsave"
 }
 ### Login
 POST http://localhost:3000/auth/login
@@ -60,6 +60,17 @@ Content-Type: application/json
   "senha": "12345678"
 }
 
+###
+### Login
+PATCH  http://localhost:3000/auth/alterar-senha
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImVtYWlsIjoiZW5oYXRzYXZlQGdtYWlsLmNvbSIsIm5vbWUiOiJFcm5lc3RvIiwicm9sZSI6ImNpZGFkYW8iLCJ0aXBvIjoiY2lkYWRhbyIsImlhdCI6MTc2NzA4MTgyNiwiZXhwIjoxNzY3MTEwNjI2fQ.OnRa7KttnESil6O2ofC0J58plk1fOHcIvgOW4JQWmQc
+Content-Type: application/json
+
+{
+  "senhaActual": "12345678",
+  "novaSenha": "Nhatsa90"
+}
+
 ### Criar upload (JSON – não recomendado)
 POST http://localhost:3000/uploads/arquivo
 Content-Type: application/json
@@ -73,15 +84,16 @@ Content-Type: application/json
 
 ### Criar denúncia AUTENTICADA
 POST http://localhost:3000/denuncias/criar
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImVtYWlsIjoiZW5oYXRzYXZlQGdtYWlsLmNvbSIsIm5vbWUiOiJFcm5lc3RvIiwicm9sZSI6ImNpZGFkYW8iLCJ0aXBvIjoiY2lkYWRhbyIsImlhdCI6MTc2NzAxMjQ3MSwiZXhwIjoxNzY3MDQxMjcxfQ.Hz62tliuK-rChuixnsTShvO8wyafBvXnndf-R0Otlyc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImVtYWlsIjoiZW5oYXRzYXZlQGdtYWlsLmNvbSIsIm5vbWUiOiJFcm5lc3RvIiwicm9sZSI6ImNpZGFkYW8iLCJ0aXBvIjoiY2lkYWRhbyIsImlhdCI6MTc2NzA5MDU3OSwiZXhwIjoxNzY3MTE5Mzc5fQ.XCelVVdEs7_lB6Pvh8zYjYP8TghBMbKjKnhpmnr-f7o
 Content-Type: application/json
 
 {
-  "descricao": "Nampula em greve",
-  "latitude": -25.969248,
-  "longitude": 32.573172,
+  "descricao": "e vai a katembe",
+  "latitude": -16.11528,
+  "longitude": 33.72944,
   "anexos": []
 }
+
 ###
 @host = http://localhost:3000
 @access_token = 

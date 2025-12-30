@@ -1,5 +1,5 @@
 // pessoa.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne, CreateDateColumn } from 'typeorm';
 
 @Entity('pessoa')
 export class Pessoa {
@@ -77,4 +77,23 @@ perfil: 'admin' | 'monitor' | 'agente' | 'funcionario';
 
   
  
+}
+
+
+@Entity('codigo_validacao')
+export class CodigoValidacao {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @ManyToOne(() => Usuario, { onDelete: 'CASCADE' })
+  usuario: Usuario;
+
+  @Column({ length: 6 })
+  codigo: string;
+
+  @Column({ type: 'timestamp' })
+  expireTime: Date;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  criadoEm: Date;
 }

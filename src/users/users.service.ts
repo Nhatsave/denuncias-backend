@@ -25,7 +25,7 @@ export class UsersService {
     const [denuncias, total] = await this.denunciaRepo.findAndCount({
       where: { id_usuario: id, apagado: Not('Sim')   },
       relations: ['usuario', 'usuario.pessoa'],
-      order: { data_denuncia: 'DESC' },
+      //order: { data_denuncia: 'DESC' },
       skip,
       take: limite,
     });

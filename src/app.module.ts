@@ -13,7 +13,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UserGestaoModule } from './user-gestao/user-gestao.module';
 import { UserGestao } from './user-gestao/entities/gestao.entity';
 import { GestaoModule } from './gestao/gestao.module';
-import { Funcionario, Pessoa, Usuario } from './auth/entities/geral.entity';
+import { CodigoValidacao, Funcionario, Pessoa, Usuario } from './auth/entities/geral.entity';
 import { HistoricoModule } from './historico/historico.module';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { APP_GUARD, Reflector } from '@nestjs/core'; 
@@ -21,17 +21,17 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true ,  envFilePath: '.env'}),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.DB_HOST,// 'mysql-denuncias.alwaysdata.net', //'localhost',
-      port: Number(process.env.DB_PORT),//3306,
-      username:  process.env.DB_USER,// 'denuncias',//'root',
-      password: process.env.DB_PASS,//'Kelinha@2311', //'Nhatsa90',
-      database:  process.env.DB_NAME, //'denuncias_dtsic', //, 'alotransito',
-      entities: [Usuario, Upload, Denuncia, UserGestao, Pessoa, Funcionario],
+      host: process.env.DB_HOST || 'localhost',// 'mysql-denuncias.alwaysdata.net', //'localhost',
+      port: Number(process.env.DB_PORT || 3306),//3306,
+      username:  process.env.DB_USER || 'root', // 'denuncias',//'root',
+      password: process.env.DB_PASS || 'Nhatsa90', //'Kelinha@2311', //'Nhatsa90',
+      database:  process.env.DB_NAME || 'alotransito', //, 'alotransito',
+      entities: [Usuario, Upload, Denuncia, UserGestao, Pessoa, Funcionario, CodigoValidacao],
       synchronize: true,
     }),
-    ConfigModule.forRoot({ isGlobal: true }),
     UsersModule,
     DenunciasModule,
     UploadsModule,
@@ -55,7 +55,6 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
       },
       inject: [JwtService, Reflector],
     },
-    // ❌ REMOVA o RolesGuard - ele já está dentro do JwtAuthGuard
   ],
 })
 export class AppModule {}

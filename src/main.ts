@@ -42,6 +42,10 @@ async function bootstrap() {
   const host = '0.0.0.0';
   
   await app.listen(port, host);
+
+  console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASS:', process.env.DB_PASS);
+console.log('DB_NAME:', process.env.DB_NAME);
   
   logger.log(`=========================================`);
   logger.log(`🚀 Servidor rodando em: http://${host}:${port}`);
